@@ -3,11 +3,35 @@
 
     import AccountCreateForm from './AccountCreateForm.svelte';
 
-    const deleteAccount = (name) => {
-        const index = $accounts.findIndex(account => account.name == name);
-        $accounts.splice(index, 1);
+    const deleteAccount = (i) => {
+        $accounts.splice(i, 1);
 
         $accounts = $accounts;
+    }
+
+    function getParent(id) {
+        const account = $accounts.find(a => a.id == id);
+
+        if (!account) return '';
+        return account;
+    }
+
+    $: getHierachy = id => {
+        const account = $accounts.find(a => a.id == id);
+
+        let parent = undefined;
+        if (account.parentAccount) parent = getParent(account.parentAccount);
+
+        let hierarchy = parent ? parent.name + ':' : '';
+
+        while (parent) {
+            parent = getParent(parent.parentAccount);
+            if (!parent) continue;
+
+            hierarchy = `${parent.name}:${hierarchy}`;
+        }
+
+        return hierarchy;
     }
 </script>
 
@@ -23,13 +47,13 @@
     <tbody>
         {#each $accounts as account, i}
             <tr>
-                <th scope="row">{account.name}</th>
+                <th scope="row">{getHierachy(account.id)}{account.name}</th>
                 <td>{account.balance}</td>
                 <td class="align-middle">
                     <span class={'badge' + (account.balanceType == 'DEBIT' ? ' bg-success' : ' bg-danger')}>{account.balanceType}</span>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-outline-danger" on:click={() => deleteAccount(account.name)}>🗑</button>
+                    <button type="button" class="btn btn-outline-danger" on:click={() => deleteAccount(i)}>🗑</button>
                     <button type="button" class={'btn' + (!account.editMode ? ' btn-outline-primary' : ' btn-primary')} on:click={() => account.editMode = !account.editMode ? true : false}>✏</button>
                 </td>
             </tr>

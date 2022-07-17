@@ -4,6 +4,7 @@
     export let index = -1;
 
     export let newAccount = {
+        id: crypto.randomUUID(),
         name: '',
         balance: 0,
         parentAccount: undefined,
@@ -13,6 +14,7 @@
     $: canCreate = !newAccount.name ? true : false;
 
     function clearForm() {
+        newAccount.id = crypto.randomUUID();
         newAccount.name = '';
         newAccount.balance = 0;
         newAccount.parentAccount = undefined;
@@ -37,6 +39,18 @@
         accountDebit: editMode ? "accountDebit" : `accountDebit-${index}`,
         accountCredit: editMode ? "accountCredit" : `accountCredit-${index}`
     };
+
+    $: parentAccountOptions = id => {
+        const options = [];
+
+        $accounts.forEach(account => {
+            if (account.id == id) return;
+
+            options.push(account);
+        });
+
+        return options;
+    }
 </script>
 
 <div class="card">
@@ -70,11 +84,13 @@
                     <div class="col">
                         <select bind:value={newAccount.parentAccount} name={forms.accountParent} id={forms.accountParent} class="form-select" disabled={$accounts.length === 0}>
                             {#if $accounts.length === 0}
-                                <option selected>No account were created</option>
+                                <option value="" selected>No account were created</option>
                             {:else}
-                                <option selected default>No Parent</option>
-                                {#each $accounts as account}
-                                    <option value={account.name}>{account.name}</option>
+                                <option value="" selected default>No Parent</option>
+                                {#each parentAccountOptions(newAccount.id) as account}
+                                    {#if account.id != newAccount.id}
+                                        <option value={account.id}>{account.name}</option>
+                                    {/if}
                                 {/each}
                             {/if}
                         </select>

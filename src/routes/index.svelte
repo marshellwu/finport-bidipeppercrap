@@ -4,7 +4,7 @@
 </script>
 
 <AccountCharts />
-<div class="row mb-5">
+<div class="row mt-5 mb-5">
     <div class="col">
         <BalanceChecker />
     </div>
