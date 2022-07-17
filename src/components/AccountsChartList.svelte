@@ -25,10 +25,12 @@
             <tr>
                 <th scope="row">{account.name}</th>
                 <td>{account.balance}</td>
-                <td>{account.balanceType}</td>
+                <td class="align-middle">
+                    <span class={'badge' + (account.balanceType == 'DEBIT' ? ' bg-success' : ' bg-danger')}>{account.balanceType}</span>
+                </td>
                 <td>
                     <button type="button" class="btn btn-outline-danger" on:click={() => deleteAccount(account.name)}>🗑</button>
-                    <button type="button" class="btn btn-outline-primary" on:click={() => account.editMode = !account.editMode ? true : false}>✏</button>
+                    <button type="button" class={'btn' + (!account.editMode ? ' btn-outline-primary' : ' btn-primary')} on:click={() => account.editMode = !account.editMode ? true : false}>✏</button>
                 </td>
             </tr>
             {#if account.editMode}
