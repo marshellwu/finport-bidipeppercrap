@@ -40,11 +40,28 @@
         accountCredit: editMode ? "accountCredit" : `accountCredit-${index}`
     };
 
+    function getParent(id) {
+        const parent = $accounts.find(account => account.id == id);
+
+        if (!parent) return '';
+        return parent;
+    }
+
     $: parentAccountOptions = id => {
         const options = [];
 
         $accounts.forEach(account => {
-            if (account.id == id) return;
+            if (account.parentAccount == id) return;
+
+            let parent = undefined;
+            if (account.parentAccount) parent = getParent(account.parentAccount);
+
+            while (parent) {
+                if (parent.parentAccount == id) break;
+                
+                parent = getParent(parent.parentAccount);
+                if (!parent) break;
+            }
 
             options.push(account);
         });

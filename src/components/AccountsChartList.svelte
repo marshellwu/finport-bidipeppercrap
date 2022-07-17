@@ -26,7 +26,7 @@
 
         while (parent) {
             parent = getParent(parent.parentAccount);
-            if (!parent) continue;
+            if (!parent) break;
 
             hierarchy = `${parent.name}:${hierarchy}`;
         }
