@@ -21,6 +21,10 @@
             <div class="alert alert-danger mt-3 mb-0" role="alert">
                 Unbalanced different: <strong>Rp{balanceDifferent}</strong>
             </div>
+        {:else}
+            <div class="alert alert-success mt-3 mb-0" role="alert">
+                Accounts are balanced.
+            </div>
         {/if}
     </div>
 </div>
