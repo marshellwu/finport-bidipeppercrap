@@ -35,7 +35,7 @@
         {/each}
         {#if miscBalance}
             <li class="list-group-item">
-                {parentName} {miscBalance}
+                {parentName} <span class="float-end">{miscBalance}</span>
             </li>
         {/if}
     </ul>
